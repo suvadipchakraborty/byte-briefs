@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
   <!-- Deep dark background matching the app's theme -->
   <rect width="1200" height="900" fill="#0a0d12" />
-  
+
   <!-- Subtle tech dot-grid background -->
   <defs>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -11,7 +11,7 @@
   <rect width="1200" height="900" fill="url(#grid)" />
 
   <!-- Center Graphic: Coffee Cup with Analytics Trend Line -->
-  <g transform="translate(600, 380) scale(2.5)">
+  <g transform="translate(600, 340) scale(2.3)">
     <!-- Cup body -->
     <path d="M-40, -20 L40, -20 C40, 20 20, 40 0, 40 C-20, 40 -40, 20 -40, -20 Z" fill="none" stroke="#35e0a6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
     <!-- Handle -->
@@ -25,18 +25,17 @@
   </g>
 
   <!-- Typography -->
-  <text x="600" y="640" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="44" font-weight="700" fill="#edf1f5" text-anchor="middle">
+  <text x="600" y="580" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="42" font-weight="700" fill="#edf1f5" text-anchor="middle">
     Wake up to fresh coffee &amp; fresh data news
   </text>
-  <text x="600" y="700" font-family="'Inter', 'Arial', sans-serif" font-size="24" font-weight="500" fill="#8a94a3" text-anchor="middle">
+  <text x="600" y="630" font-family="'Inter', 'Arial', sans-serif" font-size="23" font-weight="500" fill="#8a94a3" text-anchor="middle">
     Byte•Briefs // Data, Analytics &amp; AI in 60 Seconds
   </text>
 
-  <!-- "Built by Suva" Badge (Top Right) -->
-  <g transform="translate(930, 40)">
-    <rect width="220" height="50" rx="25" fill="#171c23" stroke="#232a33" stroke-width="2"/>
-    <text x="110" y="33" font-family="'Inter', 'Arial', sans-serif" font-size="20" font-weight="500" fill="#8a94a3" text-anchor="middle">
-      Built by <tspan fill="#35e0a6" font-weight="600">Suva</tspan>
-    </text>
-  </g>
+  <!-- "Built by Suva" credit — kept in the vertical-center safe zone (not
+       the extreme top/bottom edges) so it still shows when this image is
+       center-cropped, e.g. by the app's object-fit: cover card thumbnail. -->
+  <text x="600" y="670" font-family="'Inter', 'Arial', sans-serif" font-size="19" font-weight="500" fill="#566070" text-anchor="middle">
+    Built by <tspan fill="#35e0a6" font-weight="600">Suva</tspan>
+  </text>
 </svg>
