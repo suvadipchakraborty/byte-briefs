@@ -491,7 +491,8 @@
     el.toast.textContent = msg;
     el.toast.classList.add("is-visible");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.toast.classList.remove("is-visible"), 1800);
+    const duration = Math.min(4200, Math.max(1800, msg.length * 45));
+    toastTimer = setTimeout(() => el.toast.classList.remove("is-visible"), duration);
   }
 
   // ---------------------------------------------------------------------
@@ -559,16 +560,21 @@
       openInstallOverlay();
       return;
     }
-    showToast("Look for \"Install app\" in your browser's menu");
+    showToast("Open your browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\"");
   }
 
   function initInstallPrompt() {
     if (isStandaloneDisplay()) return; // already installed / running as an app
 
+    // Show right away rather than waiting on beforeinstallprompt, which is
+    // gated by Chrome's own engagement heuristics and can be unreliable —
+    // handleInstallClick() falls back to manual instructions if the native
+    // prompt never became available.
+    el.installBtn.hidden = false;
+
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
-      el.installBtn.hidden = false;
     });
 
     window.addEventListener("appinstalled", () => {
@@ -576,10 +582,6 @@
       el.installBtn.hidden = true;
       showToast("ByteBriefs installed");
     });
-
-    // beforeinstallprompt never fires on iOS Safari/Chrome, so surface the
-    // button there too and fall back to manual Share-sheet instructions.
-    if (isIOSDevice()) el.installBtn.hidden = false;
   }
 
   // ---------------------------------------------------------------------
