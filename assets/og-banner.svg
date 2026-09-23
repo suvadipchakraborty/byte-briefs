@@ -1,8 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
-  <!-- Deep dark background matching the app's theme -->
   <rect width="1200" height="900" fill="#0a0d12" />
-
-  <!-- Subtle tech dot-grid background -->
+  
   <defs>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
       <circle cx="2" cy="2" r="1.5" fill="#232a33" />
@@ -10,32 +8,31 @@
   </defs>
   <rect width="1200" height="900" fill="url(#grid)" />
 
-  <!-- Center Graphic: Coffee Cup with Analytics Trend Line -->
-  <g transform="translate(600, 340) scale(2.3)">
-    <!-- Cup body -->
-    <path d="M-40, -20 L40, -20 C40, 20 20, 40 0, 40 C-20, 40 -40, 20 -40, -20 Z" fill="none" stroke="#35e0a6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Handle -->
-    <path d="M40, -10 C60, -10 60, 20 35, 20" fill="none" stroke="#35e0a6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Steam waves -->
-    <path d="M-15, -40 Q-5, -55 -15, -70" fill="none" stroke="#f5a623" stroke-width="4" stroke-linecap="round"/>
-    <path d="M5, -35 Q15, -50 5, -65" fill="none" stroke="#35e0a6" stroke-width="4" stroke-linecap="round"/>
-    <path d="M25, -40 Q15, -55 25, -70" fill="none" stroke="#f5a623" stroke-width="4" stroke-linecap="round"/>
-    <!-- Trend line embedded on the cup -->
-    <path d="M-25, 0 L-10, -10 L5, 5 L25, -15" fill="none" stroke="#edf1f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
-
-  <!-- Typography -->
-  <text x="600" y="580" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="42" font-weight="700" fill="#edf1f5" text-anchor="middle">
-    Wake up to fresh coffee &amp; fresh data news
-  </text>
-  <text x="600" y="630" font-family="'Inter', 'Arial', sans-serif" font-size="23" font-weight="500" fill="#8a94a3" text-anchor="middle">
+  <!-- Top Text: App Tagline -->
+  <text x="600" y="140" font-family="'Inter', 'Arial', sans-serif" font-size="32" font-weight="500" fill="#8a94a3" text-anchor="middle">
     Byte•Briefs // Data, Analytics &amp; AI in 60 Seconds
   </text>
 
-  <!-- "Built by Suva" credit — kept in the vertical-center safe zone (not
-       the extreme top/bottom edges) so it still shows when this image is
-       center-cropped, e.g. by the app's object-fit: cover card thumbnail. -->
-  <text x="600" y="670" font-family="'Inter', 'Arial', sans-serif" font-size="19" font-weight="500" fill="#566070" text-anchor="middle">
-    Built by <tspan fill="#35e0a6" font-weight="600">Suva</tspan>
+  <!-- Center Graphic: Coffee Cup -->
+  <g transform="translate(600, 360) scale(2.5)">
+    <path d="M-40, -20 L40, -20 C40, 20 20, 40 0, 40 C-20, 40 -40, 20 -40, -20 Z" fill="none" stroke="#35e0a6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M40, -10 C60, -10 60, 20 35, 20" fill="none" stroke="#35e0a6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-15, -40 Q-5, -55 -15, -70" fill="none" stroke="#f5a623" stroke-width="4" stroke-linecap="round"/>
+    <path d="M5, -35 Q15, -50 5, -65" fill="none" stroke="#35e0a6" stroke-width="4" stroke-linecap="round"/>
+    <path d="M25, -40 Q15, -55 25, -70" fill="none" stroke="#f5a623" stroke-width="4" stroke-linecap="round"/>
+    <path d="M-25, 0 L-10, -10 L5, 5 L25, -15" fill="none" stroke="#edf1f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- "Built by Suva" Badge -->
+  <g transform="translate(490, 490)">
+    <rect width="220" height="50" rx="25" fill="#171c23" stroke="#232a33" stroke-width="2"/>
+    <text x="110" y="33" font-family="'Inter', 'Arial', sans-serif" font-size="20" font-weight="500" fill="#8a94a3" text-anchor="middle">
+      Built by <tspan fill="#35e0a6" font-weight="600">Suva</tspan>
+    </text>
+  </g>
+
+  <!-- Bottom Text -->
+  <text x="600" y="600" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="44" font-weight="700" fill="#edf1f5" text-anchor="middle">
+    Wake up to fresh coffee &amp; fresh data news
   </text>
 </svg>
