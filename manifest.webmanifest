@@ -1,9 +1,11 @@
 {
+  "id": "./",
   "name": "ByteBriefs — Data & AI in 60 Seconds",
   "short_name": "ByteBriefs",
   "description": "Your daily signal in the noise of Data, Analytics & AI.",
   "start_url": "./index.html",
   "scope": "./",
+  "display_override": ["standalone"],
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0d12",
