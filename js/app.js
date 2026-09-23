@@ -34,6 +34,30 @@
   };
 
   const FEEDBACK_EMAIL = "suvadipchakraborty@gmail.com";
+  const THEME_KEY = "bytebriefs.theme";
+
+  function getStoredTheme() {
+    try { return localStorage.getItem(THEME_KEY) || "dark"; } catch { return "dark"; }
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    const btn = document.getElementById("themeToggle");
+    if (btn) btn.setAttribute("aria-label", theme === "light" ? "Switch to dark mode" : "Switch to light mode");
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) metaTheme.setAttribute("content", theme === "light" ? "#f7f8fa" : "#0a0d12");
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute("data-theme") || "dark";
+    const next = current === "light" ? "dark" : "light";
+    try { localStorage.setItem(THEME_KEY, next); } catch {}
+    applyTheme(next);
+  }
+
+  // Apply immediately — before DOM refs are grabbed — so there's no flash of
+  // the wrong theme on load.
+  applyTheme(getStoredTheme());
 
   // ---------------------------------------------------------------------
   // Tiny persisted-set helper (localStorage-backed Set of URLs)
@@ -85,7 +109,8 @@
     aboutOverlay: document.getElementById("aboutOverlay"),
     aboutClose: document.getElementById("aboutClose"),
     clearHistoryBtn: document.getElementById("clearHistoryBtn"),
-    feedbackBtn: document.getElementById("feedbackBtn")
+    feedbackBtn: document.getElementById("feedbackBtn"),
+    themeToggle: document.getElementById("themeToggle")
   };
 
   // ---------------------------------------------------------------------
@@ -193,21 +218,25 @@
   function renderCategoryPills() {
     const present = new Set(state.all.map(a => a.category));
     const cats = CATEGORY_ORDER.filter(c => c === "All News" || present.has(c));
+    const descriptors = [
+      { key: SAVED_KEY, label: "★ Saved" },
+      ...cats.map(c => ({ key: c, label: c }))
+    ];
     el.categoryScroll.innerHTML = "";
-    cats.forEach(cat => {
+    descriptors.forEach(({ key, label }) => {
       const btn = document.createElement("button");
-      btn.className = "pill" + (cat === state.activeCategory ? " is-active" : "");
-      btn.textContent = cat;
+      btn.className = "pill" + (key === state.activeCategory ? " is-active" : "");
+      btn.textContent = label;
       btn.setAttribute("role", "tab");
-      btn.setAttribute("aria-selected", cat === state.activeCategory ? "true" : "false");
-      btn.addEventListener("click", () => setActiveCategory(cat));
+      btn.setAttribute("aria-selected", key === state.activeCategory ? "true" : "false");
+      btn.addEventListener("click", () => setActiveCategory(key));
       el.categoryScroll.appendChild(btn);
     });
   }
 
-  function setActiveCategory(cat) {
-    if (cat === state.activeCategory) return;
-    state.activeCategory = cat;
+  function setActiveCategory(key) {
+    if (key === state.activeCategory) return;
+    state.activeCategory = key;
     renderCategoryPills();
     buildDeck();
     el.deck.scrollTop = 0;
@@ -220,6 +249,11 @@
   // ---------------------------------------------------------------------
 
   function buildDeck() {
+    if (state.activeCategory === SAVED_KEY) {
+      state.deck = state.all.filter(a => state.bookmarkSet.has(a.link));
+      renderDeck();
+      return;
+    }
     const scoped = state.activeCategory === "All News"
       ? state.all
       : state.all.filter(a => a.category === state.activeCategory);
@@ -240,20 +274,9 @@
     return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
   }
 
-  const PLACEHOLDER_SVG =
-    'data:image/svg+xml;utf8,' + encodeURIComponent(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-        <rect width="400" height="300" fill="#12161c"/>
-        <g stroke="#232a33" stroke-width="1.5">
-          <line x1="0" y1="60" x2="400" y2="60"/>
-          <line x1="0" y1="120" x2="400" y2="120"/>
-          <line x1="0" y1="180" x2="400" y2="180"/>
-          <line x1="0" y1="240" x2="400" y2="240"/>
-        </g>
-        <circle cx="200" cy="150" r="34" fill="none" stroke="#35e0a6" stroke-width="3"/>
-        <path d="M182 150 l14 14 l24 -30" fill="none" stroke="#35e0a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>`
-    );
+  const SAVED_KEY = "__SAVED__";
+
+  const PLACEHOLDER_SRC = "./assets/placeholder.svg";
 
   function buildCard(article, isEnd) {
     const card = document.createElement("article");
@@ -264,7 +287,7 @@
 
     card.innerHTML = `
       <div class="card__media">
-        <img alt="" loading="lazy" src="${hasImage ? escapeAttr(article.image) : PLACEHOLDER_SVG}">
+        <img alt="" loading="lazy" src="${hasImage ? escapeAttr(article.image) : PLACEHOLDER_SRC}">
         <div class="card__media-gradient"></div>
         <div class="card__meta-row">
           <span class="card__source-pill">${escapeHtml(article.category || "ByteBriefs")}</span>
@@ -288,7 +311,7 @@
     const img = card.querySelector("img");
     if (hasImage) {
       img.addEventListener("load", () => img.classList.add("is-loaded"));
-      img.addEventListener("error", () => { img.src = PLACEHOLDER_SVG; img.classList.add("is-loaded"); });
+      img.addEventListener("error", () => { img.src = PLACEHOLDER_SRC; img.classList.add("is-loaded"); });
     } else {
       img.classList.add("is-loaded");
     }
@@ -297,15 +320,24 @@
   }
 
   function buildEndCard() {
+    const isSaved = state.activeCategory === SAVED_KEY;
     const div = document.createElement("div");
     div.className = "deck-end";
-    div.innerHTML = `
-      <div class="deck-end__mark">📡</div>
-      <div class="deck-end__title">You're all caught up</div>
-      <div class="deck-end__body">No unread stories left in this category. New ones land daily at 6am IST.</div>
-      <button class="deck-end__btn" id="resetFromEnd">Reset read history</button>
-    `;
-    div.querySelector("#resetFromEnd").addEventListener("click", clearReadHistory);
+    if (isSaved) {
+      div.innerHTML = `
+        <div class="deck-end__mark">🔖</div>
+        <div class="deck-end__title">No saved stories yet</div>
+        <div class="deck-end__body">Tap the bookmark icon while reading a brief to save it here.</div>
+      `;
+    } else {
+      div.innerHTML = `
+        <div class="deck-end__mark">📡</div>
+        <div class="deck-end__title">You're all caught up</div>
+        <div class="deck-end__body">No unread stories left in this category. New ones land daily at 6am IST.</div>
+        <button class="deck-end__btn" id="resetFromEnd">Reset read history</button>
+      `;
+      div.querySelector("#resetFromEnd").addEventListener("click", clearReadHistory);
+    }
     return div;
   }
 
@@ -333,6 +365,11 @@
   // ---------------------------------------------------------------------
 
   function updateCounter() {
+    if (state.activeCategory === SAVED_KEY) {
+      const pos = state.deck.length ? Math.min(state.currentIndex + 1, state.deck.length) : 0;
+      el.counterText.innerHTML = `<b>${pos}</b>/${state.deck.length} saved`;
+      return;
+    }
     const scoped = state.activeCategory === "All News"
       ? state.all
       : state.all.filter(a => a.category === state.activeCategory);
@@ -417,6 +454,12 @@
       showToast("Saved");
     }
     saveSet(LS_KEYS.bookmarks, state.bookmarkSet);
+    if (state.activeCategory === SAVED_KEY) {
+      const keepIndex = Math.min(state.currentIndex, state.deck.length - 2);
+      buildDeck();
+      state.currentIndex = Math.max(0, keepIndex);
+      scrollToIndex(state.currentIndex, false);
+    }
     updateBookmarkButtonState();
   }
 
@@ -459,9 +502,9 @@
   // Keyboard shortcuts
   // ---------------------------------------------------------------------
 
-  function scrollToIndex(i) {
+  function scrollToIndex(i, smooth = true) {
     const h = el.deck.clientHeight;
-    el.deck.scrollTo({ top: i * h, behavior: "smooth" });
+    el.deck.scrollTo({ top: i * h, behavior: smooth ? "smooth" : "auto" });
   }
 
   function onKeydown(e) {
@@ -491,6 +534,7 @@
     el.aboutClose.addEventListener("click", closeAbout);
     el.aboutOverlay.addEventListener("click", (e) => { if (e.target === el.aboutOverlay) closeAbout(); });
     el.clearHistoryBtn.addEventListener("click", clearReadHistory);
+    el.themeToggle.addEventListener("click", toggleTheme);
     document.addEventListener("keydown", onKeydown);
   }
 

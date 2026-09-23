@@ -4,7 +4,7 @@
  * offline; the live data fetch in app.js always goes to the network first
  * and only falls back to its own localStorage cache / mock data.
  */
-const CACHE_NAME = "bytebriefs-shell-v1";
+const CACHE_NAME = "bytebriefs-shell-v2";
 
 const SHELL_FILES = [
   "./",
@@ -15,7 +15,9 @@ const SHELL_FILES = [
   "./manifest.webmanifest",
   "./assets/icon-192.png",
   "./assets/icon-512.png",
-  "./assets/og-banner.svg"
+  "./assets/og-banner.svg",
+  "./assets/og-banner.png",
+  "./assets/placeholder.svg"
 ];
 
 self.addEventListener("install", (event) => {

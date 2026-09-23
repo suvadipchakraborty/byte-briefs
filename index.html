@@ -11,14 +11,19 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="ByteBriefs — Data &amp; AI in 60 Seconds">
 <meta property="og:description" content="Your daily signal in the noise of Data, Analytics &amp; AI.">
-<meta property="og:image" content="./assets/og-banner.svg">
-<meta property="og:url" content="https://bytebriefs.pages.dev">
+<meta property="og:image" content="https://byte-briefs.suvadipchakraborty.workers.dev/assets/og-banner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:url" content="https://byte-briefs.suvadipchakraborty.workers.dev/">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ByteBriefs — Data &amp; AI in 60 Seconds">
 <meta name="twitter:description" content="Your daily signal in the noise of Data, Analytics &amp; AI.">
-<meta name="twitter:image" content="./assets/og-banner.svg">
+<meta name="twitter:image" content="https://byte-briefs.suvadipchakraborty.workers.dev/assets/og-banner.png">
+
+<link rel="canonical" href="https://byte-briefs.suvadipchakraborty.workers.dev/">
 
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./assets/icon-192.png">
@@ -38,6 +43,18 @@
     <div class="category-bar__brand">
       <span class="category-bar__brand-mark">Byte<span class="dot">•</span>Briefs</span>
       <span class="category-bar__tagline">Data &amp; AI in 60 seconds</span>
+      <button class="theme-toggle" id="themeToggle" aria-label="Switch to light mode">
+        <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+        <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4.5"/>
+          <line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/>
+          <line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/>
+          <line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/>
+          <line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/>
+        </svg>
+      </button>
     </div>
     <div class="category-scroll" id="categoryScroll" role="tablist" aria-label="Filter by category"></div>
   </header>
@@ -79,8 +96,8 @@
       <p class="modal-sheet__mission">
         ByteBriefs pulls together the day's most relevant stories in data engineering, governance,
         AI workflows, and analytics leadership, and cuts each one down to a single card you can read
-        in under a minute. Swipe up for the next brief, swipe through a whole category, or just check
-        in once a day to stay current without the scroll.
+        in under a minute. Swipe up for the next brief, switch categories along the top, or bookmark
+        a story to revisit later from the ★ Saved tab.
       </p>
       <span class="modal-sheet__badge">Built by <b>Suva</b></span>
 
