@@ -55,6 +55,12 @@
           <line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/>
         </svg>
       </button>
+      <button class="theme-toggle" id="installBtn" aria-label="Add ByteBriefs to home screen" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="7" y="2" width="10" height="20" rx="2.2"/>
+          <path d="M12 8v6M9.3 11.7L12 14.4l2.7-2.7"/>
+        </svg>
+      </button>
     </div>
     <div class="category-scroll" id="categoryScroll" role="tablist" aria-label="Filter by category"></div>
   </header>
@@ -118,6 +124,20 @@
 
       <button class="modal-sheet__row-btn" id="aboutClose" style="margin-top:10px;">
         Close
+        <span class="modal-sheet__row-arrow">✕</span>
+      </button>
+    </div>
+  <div class="modal-overlay" id="installOverlay">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-label="Add to home screen">
+      <div class="modal-sheet__handle"></div>
+      <div class="modal-sheet__mark">Add to Home Screen</div>
+      <p class="modal-sheet__mission" id="installSteps">
+        Tap the <b>Share</b> icon in your browser's toolbar, then choose
+        <b>"Add to Home Screen."</b> ByteBriefs will open full-screen, like a
+        regular app, whenever you tap its icon.
+      </p>
+      <button class="modal-sheet__row-btn" id="installClose" style="margin-top:4px;">
+        Got it
         <span class="modal-sheet__row-arrow">✕</span>
       </button>
     </div>

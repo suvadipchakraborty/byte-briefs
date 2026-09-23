@@ -128,6 +128,7 @@ a { color: inherit; text-decoration: none; }
 
 .theme-toggle:active { background: var(--surface-raised); }
 .theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle[hidden] { display: none; }
 .theme-toggle__sun { display: none; }
 .theme-toggle__moon { display: block; }
 

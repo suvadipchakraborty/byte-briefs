@@ -110,7 +110,10 @@
     aboutClose: document.getElementById("aboutClose"),
     clearHistoryBtn: document.getElementById("clearHistoryBtn"),
     feedbackBtn: document.getElementById("feedbackBtn"),
-    themeToggle: document.getElementById("themeToggle")
+    themeToggle: document.getElementById("themeToggle"),
+    installBtn: document.getElementById("installBtn"),
+    installOverlay: document.getElementById("installOverlay"),
+    installClose: document.getElementById("installClose")
   };
 
   // ---------------------------------------------------------------------
@@ -512,6 +515,10 @@
       if (e.key === "Escape") closeAbout();
       return;
     }
+    if (el.installOverlay.classList.contains("is-open")) {
+      if (e.key === "Escape") closeInstallOverlay();
+      return;
+    }
     const maxIndex = el.deck.children.length - 1;
     if (e.key === "ArrowDown" || e.key === "j" || e.key === "J") {
       scrollToIndex(Math.min(state.currentIndex + 1, maxIndex));
@@ -520,6 +527,59 @@
     } else if (e.key === "b" || e.key === "B") {
       toggleBookmark();
     }
+  }
+
+  // ---------------------------------------------------------------------
+  // Add to Home Screen
+  // ---------------------------------------------------------------------
+
+  let deferredInstallPrompt = null;
+
+  function isStandaloneDisplay() {
+    return window.matchMedia("(display-mode: standalone)").matches
+      || window.navigator.standalone === true;
+  }
+
+  function isIOSDevice() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  }
+
+  function openInstallOverlay() { el.installOverlay.classList.add("is-open"); }
+  function closeInstallOverlay() { el.installOverlay.classList.remove("is-open"); }
+
+  async function handleInstallClick() {
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      const choice = await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      if (choice && choice.outcome === "accepted") el.installBtn.hidden = true;
+      return;
+    }
+    if (isIOSDevice()) {
+      openInstallOverlay();
+      return;
+    }
+    showToast("Look for \"Install app\" in your browser's menu");
+  }
+
+  function initInstallPrompt() {
+    if (isStandaloneDisplay()) return; // already installed / running as an app
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      el.installBtn.hidden = false;
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      el.installBtn.hidden = true;
+      showToast("ByteBriefs installed");
+    });
+
+    // beforeinstallprompt never fires on iOS Safari/Chrome, so surface the
+    // button there too and fall back to manual Share-sheet instructions.
+    if (isIOSDevice()) el.installBtn.hidden = false;
   }
 
   // ---------------------------------------------------------------------
@@ -535,6 +595,9 @@
     el.aboutOverlay.addEventListener("click", (e) => { if (e.target === el.aboutOverlay) closeAbout(); });
     el.clearHistoryBtn.addEventListener("click", clearReadHistory);
     el.themeToggle.addEventListener("click", toggleTheme);
+    el.installBtn.addEventListener("click", handleInstallClick);
+    el.installClose.addEventListener("click", closeInstallOverlay);
+    el.installOverlay.addEventListener("click", (e) => { if (e.target === el.installOverlay) closeInstallOverlay(); });
     document.addEventListener("keydown", onKeydown);
   }
 
@@ -548,6 +611,7 @@
     renderCategoryPills();
     buildDeck();
     updateBookmarkButtonState();
+    initInstallPrompt();
 
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./sw.js").catch(() => {});
